@@ -20,7 +20,7 @@ use OpenApi\Attributes as OA;
 class MemoryWeatherController extends Controller
 {
     #[OA\Get(
-        path: "/api/random-idea",
+        path: "/v1/weather/random-idea",
         description: "Возвращает случайную идею, связанную с погодой, включая описание, настроение, время года и погодные условия",
         summary: "Получить случайную идею о погоде",
         tags: ["Ideas"],

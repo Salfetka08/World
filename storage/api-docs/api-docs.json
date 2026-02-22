@@ -9,14 +9,14 @@
         "version": "1.0.0"
     },
     "paths": {
-        "/api/random-idea": {
+        "/v1/weather/random-idea": {
             "get": {
                 "tags": [
                     "Ideas"
                 ],
                 "summary": "Получить случайную идею о погоде",
                 "description": "Возвращает случайную идею, связанную с погодой, включая описание, настроение, время года и погодные условия",
-                "operationId": "d77d307c9ce4a3402763c59620275e0b",
+                "operationId": "0f9362ee1e0899e9542589fdf4627d6b",
                 "responses": {
                     "200": {
                         "description": "Успешный ответ",
