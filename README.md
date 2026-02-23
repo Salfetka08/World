@@ -18,4 +18,4 @@
 
 - [Гареева Руслана](https://github.com/Salfetka08)
 - [Пожарская Анна](https://github.com/luniah)
-- [Панова Мария](TODO)
+- [Панова Мария](https://github.com/pannaMariia)
