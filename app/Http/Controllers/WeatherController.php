@@ -2,25 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Base\Controller;
 use Illuminate\Http\JsonResponse;
 use OpenApi\Attributes as OA;
 
-#[OA\Info(
-    version: "1.0.0",
-    description: "API для получения информации связанной с погодой.",
-    title: "Weather API",
-    contact: new OA\Contact(
-        email: "test@example.com"
-    )
-)]
 #[OA\Tag(
     name: "Weather",
     description: "Получение случайных идей о погоде"
 )]
-class MemoryWeatherController extends Controller
+class WeatherController extends Controller
 {
     #[OA\Get(
-        path: "/v1/weather/random-idea",
+        path: "/api/v1/weather/random-idea",
         description: "Возвращает случайную идею, связанную с погодой, включая описание, настроение, время года и погодные условия",
         summary: "Получить случайную идею о погоде",
         tags: ["Ideas"],
