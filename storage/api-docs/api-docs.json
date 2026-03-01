@@ -1,22 +1,22 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "Weather API",
-        "description": "API для получения информации связанной с погодой.",
+        "title": "World API",
+        "description": "API для получения информации связанной с окружающим миром.",
         "contact": {
-            "email": "test@example.com"
+            "email": "https://github.com/Salfetka08"
         },
         "version": "1.0.0"
     },
     "paths": {
-        "/v1/weather/random-idea": {
+        "/api/v1/weather/random-idea": {
             "get": {
                 "tags": [
                     "Ideas"
                 ],
                 "summary": "Получить случайную идею о погоде",
                 "description": "Возвращает случайную идею, связанную с погодой, включая описание, настроение, время года и погодные условия",
-                "operationId": "0f9362ee1e0899e9542589fdf4627d6b",
+                "operationId": "d6d530cb09b5f641340f463edddaa9db",
                 "responses": {
                     "200": {
                         "description": "Успешный ответ",
@@ -99,9 +99,167 @@
                     }
                 }
             }
+        },
+        "/api/v1/world/current": {
+            "post": {
+                "tags": [
+                    "World"
+                ],
+                "summary": "Получить текущую информацию о мире",
+                "description": "Возвращает текущие погодные условия, время суток и сезон для указанного пользователя",
+                "operationId": "f1da69d8540674d5048fdce6309ef53e",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "userId"
+                                ],
+                                "properties": {
+                                    "userId": {
+                                        "description": "ID пользователя",
+                                        "type": "integer",
+                                        "example": 123
+                                    },
+                                    "latitude": {
+                                        "description": "Широта (опционально)",
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 55.7558
+                                    },
+                                    "longitude": {
+                                        "description": "Долгота (опционально)",
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 37.6176
+                                    },
+                                    "timestamp": {
+                                        "description": "Время запроса (опционально)",
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "example": "2026-03-01T15:30:00Z"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Успешный ответ",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "userId": {
+                                            "type": "integer",
+                                            "example": 123
+                                        },
+                                        "location": {
+                                            "type": "string",
+                                            "example": "Москва"
+                                        },
+                                        "weather": {
+                                            "properties": {
+                                                "temperature": {
+                                                    "type": "integer",
+                                                    "example": -5
+                                                },
+                                                "feelsLike": {
+                                                    "type": "integer",
+                                                    "example": -8
+                                                },
+                                                "condition": {
+                                                    "type": "string",
+                                                    "enum": [
+                                                        "CLEAR",
+                                                        "CLOUDY",
+                                                        "RAINY",
+                                                        "SNOWY",
+                                                        "STORMY"
+                                                    ],
+                                                    "example": "SNOWY"
+                                                },
+                                                "humidity": {
+                                                    "type": "integer",
+                                                    "example": 85
+                                                },
+                                                "windSpeed": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 7.5
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "dayTime": {
+                                            "type": "string",
+                                            "enum": [
+                                                "MORNING",
+                                                "AFTERNOON",
+                                                "EVENING",
+                                                "NIGHT"
+                                            ],
+                                            "example": "EVENING"
+                                        },
+                                        "season": {
+                                            "type": "string",
+                                            "enum": [
+                                                "SPRING",
+                                                "SUMMER",
+                                                "AUTUMN",
+                                                "WINTER"
+                                            ],
+                                            "example": "WINTER"
+                                        },
+                                        "sunrise": {
+                                            "type": "string",
+                                            "format": "time",
+                                            "example": "08:30"
+                                        },
+                                        "sunset": {
+                                            "type": "string",
+                                            "format": "time",
+                                            "example": "16:45"
+                                        },
+                                        "updatedAt": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2025-01-20T15:30:00Z"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Ошибка валидации"
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "GetCurrentWorldRequest": {
+                "description": "Запрос на получение текущей информации о мире",
+                "required": [
+                    "userId"
+                ]
+            }
         }
     },
     "tags": [
+        {
+            "name": "World",
+            "description": "Информация о текущем окружающем мире."
+        },
         {
             "name": "Ideas",
             "description": "Ideas"

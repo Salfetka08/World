@@ -15,6 +15,12 @@ return [
                 'docs_json' => 'api-docs.json',
                 'annotations' => base_path('app'),
             ],
+            'middleware' => [
+                'api' => ['web'],  // Это решает проблему CSRF!
+                'asset' => [],
+                'docs' => [],
+                'oauth2_callback' => [],
+            ],
         ],
     ],
 ];
