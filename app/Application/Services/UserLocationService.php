@@ -18,15 +18,15 @@ class UserLocationService
      */
     public function getLatestCoordinatesByUserId(GetCurrentWorldRequest $request): ?UserLocationModel
     {
-        if($request->user_id == 123){
+//        if($request->user_id == 123){
             return new UserLocationModel(
                 latitude: 55.7558,
                 longitude: 37.6176,
                 cityName: 'Москва',
                 country: 'Россия'
             );
-        }
-        $location = $this->locationRepository->findLatestByUserId($request->user_id);
-        return UserLocationModel::fromEloquentModel($location);
+//        }
+//        $location = $this->locationRepository->findLatestByUserId($request->user_id);
+//        return UserLocationModel::fromEloquentModel($location);
     }
 }

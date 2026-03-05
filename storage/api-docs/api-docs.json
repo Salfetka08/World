@@ -248,10 +248,7 @@
     "components": {
         "schemas": {
             "GetCurrentWorldRequest": {
-                "description": "Запрос на получение текущей информации о мире",
-                "required": [
-                    "userId"
-                ]
+                "description": "Запрос на получение текущей информации о мире"
             }
         }
     },
