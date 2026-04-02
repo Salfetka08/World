@@ -17,7 +17,7 @@ use OpenApi\Attributes as OA;
 class WorldController extends Controller
 {
     public function __construct(
-        private readonly WorldService $worldAction
+        private readonly WorldService $worldService
     )
     {
     }
@@ -29,7 +29,7 @@ class WorldController extends Controller
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\JsonContent(
-                required: ["userId"],  // только user_id обязателен
+                required: ["userId"],
                 properties: [
                     new OA\Property(
                         property: "userId",
@@ -102,14 +102,11 @@ class WorldController extends Controller
     public function getCurrentWorld(GetCurrentWorldRequest $request): JsonResponse
     {
         try {
-            if ($request->userId != 123) {
-                $result = $this->worldAction->getCurrentWorld($request);
-                return (new CurrentWorldResponse($result))->toResponse($request);
-            } else {
-
+            // Дефолтный ответ для тестового пользователя
+            if ($request->userId == 123) {
                 $result = [
                     'userId' => $request->userId,
-                    'location' => 'ДЕФОЛТ',
+                    'location' => 'Москва (Тестовая локация)',
                     'weather' => [
                         'temperature' => -5,
                         'feelsLike' => -8,
@@ -121,15 +118,33 @@ class WorldController extends Controller
                     'season' => 'WINTER',
                     'sunrise' => '08:30',
                     'sunset' => '16:45',
-                    'updatedAt' => date('c')
+                    'updatedAt' => date('c'),
+                    'entertainment' => [ // Добавляем тестовые данные для развлечений
+                        'nearby_places' => [
+                            [
+                                'id' => 1,
+                                'name' => 'Тестовый кинотеатр',
+                                'category' => 'cinema',
+                                'distance_km' => 0.5,
+                                'rating' => 4.5
+                            ]
+                        ],
+                        'recommendations' => [
+                            'Рекомендуем посетить местные достопримечательности'
+                        ]
+                    ]
                 ];
+
+                return response()->json($result);
             }
 
-            return response()->json($result);
+            // Для остальных пользователей вызываем реальный сервис
+            $result = $this->worldService->getCurrentWorld($request);
+            return (new CurrentWorldResponse($result))->toResponse($request);
 
         } catch (Exception $e) {
             return response()->json([
-                'error' => 'Failed to fetch weather data',
+                'error' => 'Failed to fetch world data',
                 'message' => $e->getMessage()
             ], 500);
         }

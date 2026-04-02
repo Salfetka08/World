@@ -21,7 +21,6 @@ class CurrentWorldResponse implements Responsable
     {
         return response()->json([
             'userId' => $this->currentWorldModel->userId,
-            'location' => $this->currentWorldModel->location,
             'weather' => [
                 'temperature' => $this->currentWorldModel->weather->temperature,
                 'feelsLike' => $this->currentWorldModel->weather->feelsLike,
@@ -34,6 +33,7 @@ class CurrentWorldResponse implements Responsable
             'sunrise' => $this->currentWorldModel->sunrise,
             'sunset' => $this->currentWorldModel->sunset,
             'updatedAt' => $this->currentWorldModel->updatedAt,
+            'entertainment' => $this->currentWorldModel->entertainment, // Добавляем поле
         ]);
     }
 }

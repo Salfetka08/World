@@ -3,16 +3,15 @@
 namespace App\Application\Services;
 
 use App\Application\Models\CurrentWorldModel;
-use App\Application\Models\UserLocationModel;
 use App\Http\Requests\GetCurrentWorldRequest;
 use Exception;
 
 class WorldService
 {
     public function __construct(
-        private readonly UserLocationService $userLocationService,
         private readonly WeatherService      $weatherService,
-        private readonly TimeService         $timeService
+        private readonly TimeService         $timeService,
+        private readonly EntertainmentService $entertainmentService
     )
     {
     }
@@ -22,40 +21,46 @@ class WorldService
      */
     public function getCurrentWorld(GetCurrentWorldRequest $request): CurrentWorldModel
     {
-        // 1. Получаем координаты пользователя
-//        TODO: Нужно сначала клиента в базу добавить, чтобы использовать этот метод.
-//        $location = $this->userLocationService->getLatestCoordinatesByUserId($request->userId);
-        $location = new UserLocationModel(
-            latitude: 55.7558,
-            longitude: 37.6176,
-            cityName: 'Москва',
-            country: 'Россия'
-        );;
-
-        if (!$location) {
-            throw new Exception("Не найдена локация для {$request->userId}", 404);
-        }
-
-        // 2. Получаем погоду по координатам
+        // Получаем погоду по координатам
         $weatherData = $this->weatherService->fetchWeather(
-            $location->latitude,
-            $location->longitude
+            $request->latitude,
+            $request->longitude
         );
 
-        // 3. Определяем время суток и сезон
+        // Определяем время суток и сезон
         $dayTime = $this->timeService->getDayTime();
         $season = $this->timeService->getSeason();
 
-        // 4. Формируем ответ
+        // Получаем развлекательные места рядом
+        $nearbyEntertainment = $this->entertainmentService->findNearbyPlaces(
+            $request->latitude,
+            $request->longitude,
+            5.0,
+            null,
+            20
+        );
+
+        // Получаем по категориям
+        $entertainmentByCategories = $this->entertainmentService->getPlacesByCategories(
+            $request->latitude,
+            $request->longitude,
+            ['restaurant', 'cafe', 'cinema', 'park', 'museum'],
+            5
+        );
+
+        // Формируем ответ (исправлено: убран $location)
         return new CurrentWorldModel(
             userId: $request->userId,
-            location: $location->cityName ?? 'Unknown',
             weather: $weatherData,
             dayTime: $dayTime,
             season: $season,
-            sunrise: '08:00', // можно получать из API погоды
-            sunset: '20:00',   // можно получать из API погоды
-            updatedAt: now()->toIso8601String()
+            sunrise: '08:00',
+            sunset: '20:00',
+            updatedAt: now()->toIso8601String(),
+            entertainment: [
+                'nearby_places' => $nearbyEntertainment,
+                'places_by_category' => $entertainmentByCategories,
+            ]
         );
     }
 }
