@@ -2,11 +2,11 @@
 
 namespace App\Application\Providers;
 
+use App\Application\Services\EntertainmentService;
 use App\Application\Services\TimeService;
-use App\Application\Services\UserLocationService;
 use App\Application\Services\WeatherService;
 use App\Application\Services\WorldService;
-use App\Domain\Repositories\UserLocationRepository;
+use App\Domain\Repositories\EntertainmentPlaceRepository;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -22,8 +22,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function registerRepositories(): void
     {
-        $this->app->singleton(UserLocationRepository::class, function ($app) {
-            return new UserLocationRepository();
+        $this->app->singleton(EntertainmentPlaceRepository::class, function ($app) {
+            return new EntertainmentPlaceRepository();
         });
     }
 
@@ -32,9 +32,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function registerServices(): void
     {
-        $this->app->singleton(UserLocationService::class, function ($app) {
-            return new UserLocationService(
-                $app->make(UserLocationRepository::class)
+        $this->app->singleton(EntertainmentService::class, function ($app) {
+            return new EntertainmentService(
+                $app->make(EntertainmentPlaceRepository::class)
             );
         });
 
@@ -49,9 +49,9 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->singleton(WorldService::class, function ($app) {
             return new WorldService(
-                $app->make(UserLocationService::class),
                 $app->make(WeatherService::class),
                 $app->make(TimeService::class),
+                $app->make(EntertainmentService::class)
             );
         });
     }
