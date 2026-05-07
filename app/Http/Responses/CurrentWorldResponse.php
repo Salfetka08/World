@@ -21,19 +21,13 @@ class CurrentWorldResponse implements Responsable
     {
         return response()->json([
             'userId' => $this->currentWorldModel->userId,
-            'weather' => [
-                'temperature' => $this->currentWorldModel->weather->temperature,
-                'feelsLike' => $this->currentWorldModel->weather->feelsLike,
-                'condition' => $this->currentWorldModel->weather->condition,
-                'humidity' => $this->currentWorldModel->weather->humidity,
-                'windSpeed' => $this->currentWorldModel->weather->windSpeed,
-            ],
+            'weather' => $this->currentWorldModel
+                ->environmentDataModel
+                ->toArray(),
             'dayTime' => $this->currentWorldModel->dayTime,
             'season' => $this->currentWorldModel->season,
-            'sunrise' => $this->currentWorldModel->sunrise,
-            'sunset' => $this->currentWorldModel->sunset,
             'updatedAt' => $this->currentWorldModel->updatedAt,
-            'entertainment' => $this->currentWorldModel->entertainment, // Добавляем поле
+            'entertainment' => $this->currentWorldModel->entertainment,
         ]);
     }
 }

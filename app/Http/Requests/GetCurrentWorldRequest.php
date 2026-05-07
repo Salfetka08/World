@@ -20,7 +20,6 @@ class GetCurrentWorldRequest extends FormRequest
             'userId' => 'required|integer',
             'latitude' => 'sometimes|numeric',
             'longitude' => 'sometimes|numeric',
-            'timestamp' => 'sometimes|date',
         ];
     }
 

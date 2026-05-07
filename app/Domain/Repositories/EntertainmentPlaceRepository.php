@@ -16,15 +16,58 @@ class EntertainmentPlaceRepository
         float $radiusKm = 5.0,
         ?string $category = null,
         int $limit = 20
-    ): Collection {
-        // Простой запрос без расчета расстояния
-        $query = EntertainmentPlace::active();
+    ): \Illuminate\Support\Collection
+    {
+
+        $places = EntertainmentPlace::active()->get();
 
         if ($category) {
-            $query->where('category', $category);
+            $places = $places->where('category', $category);
         }
 
-        return $query->limit($limit)->get();
+        $places = $places
+            ->map(function ($place) use ($latitude, $longitude) {
+
+                $distance = $this->calculateDistance(
+                    $latitude,
+                    $longitude,
+                    $place->latitude,
+                    $place->longitude
+                );
+
+                $place->distance = $distance;
+
+                return $place;
+            })
+            ->filter(fn($place) => $place->distance <= $radiusKm)
+            ->sortBy('distance')
+            ->take($limit);
+
+        return collect($places->values());
+    }
+
+    private function calculateDistance(
+        float $lat1,
+        float $lon1,
+        float $lat2,
+        float $lon2
+    ): float {
+
+        $earthRadius = 6371;
+
+        $dLat = deg2rad($lat2 - $lat1);
+        $dLon = deg2rad($lon2 - $lon1);
+
+        $a =
+            sin($dLat / 2) * sin($dLat / 2) +
+            cos(deg2rad($lat1)) *
+            cos(deg2rad($lat2)) *
+            sin($dLon / 2) *
+            sin($dLon / 2);
+
+        $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+
+        return $earthRadius * $c;
     }
 
     /**

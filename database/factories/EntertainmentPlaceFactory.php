@@ -1,5 +1,4 @@
 <?php
-// database/factories/EntertainmentPlaceFactory.php
 
 namespace Database\Factories;
 
@@ -24,13 +23,13 @@ class EntertainmentPlaceFactory extends Factory
             'website' => $this->faker->url,
             'rating' => $this->faker->randomFloat(1, 3.0, 5.0),
             'price_level' => $this->faker->numberBetween(1, 4),
-            'details' => json_encode([
+            'details' => [
                 'description' => $this->faker->sentence,
-            ]),
-            'working_hours' => json_encode([
+            ],
+            'working_hours' => [
                 'weekdays' => '09:00-21:00',
                 'weekend' => '10:00-20:00'
-            ]),
+            ],
             'is_active' => true,
         ];
     }

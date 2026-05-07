@@ -20,6 +20,7 @@ class EntertainmentService
         ?string $category = null,
         int $limit = 10
     ): array {
+
         $places = $this->repository->findNearby(
             $latitude,
             $longitude,
