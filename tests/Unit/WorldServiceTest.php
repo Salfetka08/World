@@ -44,6 +44,7 @@ class WorldServiceTest extends TestCase
 
     public function test_get_current_world_returns_correct_data()
     {
+
         // Создаем тестовый запрос
         $request = new GetCurrentWorldRequest();
         $request->userId = 1;
