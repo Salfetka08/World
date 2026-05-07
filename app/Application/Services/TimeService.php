@@ -8,10 +8,16 @@ class TimeService
 {
     /**
      * Определить время суток (утро/день/вечер/ночь)
+     *
+     * @param int|null $timestamp Unix timestamp (если null - использует текущее время)
      */
-    public function getDayTime(): string
+    public function getDayTime(?int $timestamp = null): string
     {
-        $hour = (int) Carbon::now('UTC')->format('H');
+        $carbon = $timestamp
+            ? Carbon::createFromTimestamp($timestamp)
+            : Carbon::now();
+
+        $hour = (int) $carbon->format('H');
 
         return match (true) {
             $hour >= 5 && $hour < 12 => 'MORNING',
@@ -23,10 +29,16 @@ class TimeService
 
     /**
      * Определить сезон (зима/весна/лето/осень)
+     *
+     * @param int|null $timestamp Unix timestamp (если null - использует текущее время)
      */
-    public function getSeason(): string
+    public function getSeason(?int $timestamp = null): string
     {
-        $month = (int) Carbon::now('UTC')->format('m');
+        $carbon = $timestamp
+            ? Carbon::createFromTimestamp($timestamp)
+            : Carbon::now();
+
+        $month = (int) $carbon->format('m');
 
         return match (true) {
             $month >= 3 && $month <= 5 => 'SPRING',

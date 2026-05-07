@@ -50,13 +50,6 @@ class WorldController extends Controller
                         type: "number",
                         format: "float",
                         example: 37.6176
-                    ),
-                    new OA\Property(
-                        property: "timestamp",
-                        description: "Время запроса (опционально)",
-                        type: "string",
-                        format: "date-time",
-                        example: "2026-03-01T15:30:00Z"
                     )
                 ]
             )
@@ -138,7 +131,6 @@ class WorldController extends Controller
                 return response()->json($result);
             }
 
-            // Для остальных пользователей вызываем реальный сервис
             $result = $this->worldService->getCurrentWorld($request);
             return (new CurrentWorldResponse($result))->toResponse($request);
 
