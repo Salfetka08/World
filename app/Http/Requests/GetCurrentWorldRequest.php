@@ -2,9 +2,11 @@
 
 namespace App\Http\Requests;
 
+use AllowDynamicProperties;
 use Illuminate\Foundation\Http\FormRequest;
 use OpenApi\Attributes as OA;
 
+#[AllowDynamicProperties]
 #[OA\Schema(
     schema: "GetCurrentWorldRequest",
     description: "Запрос на получение текущей информации о мире",
